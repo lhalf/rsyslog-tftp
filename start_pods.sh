@@ -15,6 +15,7 @@ podman run \
 	--detach \
 	--replace \
 	-v "$(pwd)/input/rsyslog.conf:/etc/rsyslog.conf":Z \
+	-v "$(pwd)/build/tftp-client:/usr/bin/tftp-client":Z \
 	-p "10514:514" \
 	--name ${input_pod} \
 	--network ${pod} \
@@ -25,6 +26,7 @@ podman run \
 	--detach \
 	--replace \
 	-v "$(pwd)/output/rsyslog.conf:/etc/rsyslog.conf":Z \
+	-v "$(pwd)/build/tftp-server:/usr/bin/tftp-server":Z \
 	--name ${output_pod} \
 	--network ${pod} \
 	${pod}
