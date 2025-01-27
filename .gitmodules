@@ -1,0 +1,3 @@
+[submodule "go-tftp"]
+	path = go-tftp
+	url = git@github.com:oakdoor/go-tftp.git
