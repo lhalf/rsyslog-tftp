@@ -1,6 +1,7 @@
-FROM debian:bookworm
+FROM docker.io/redhat/ubi9
 
-RUN apt-get update -y
-RUN apt-get install -y rsyslog
+ADD rsyslog-rhel.repo rsyslog-daily-rhel.repo /etc/yum.repos.d/
+
+RUN yum install -y rsyslog
 
 ENTRYPOINT ["/usr/sbin/rsyslogd", "-n"]

@@ -1,0 +1,7 @@
+[rsyslog_v8]
+name=Adiscon RHEL-$releasever - local packages for $basearch
+baseurl=http://rpms.adiscon.com/v8-stable/rhel-$releasever/$basearch
+enabled=1
+gpgcheck=0
+gpgkey=https://rpms.adiscon.com/RPM-GPG-KEY-Adiscon
+protect=1

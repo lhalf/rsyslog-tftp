@@ -5,7 +5,7 @@ input_pod=input
 output_pod=output
 
 echo "building pod ${pod}..."
-podman build --quiet --file Dockerfile --tag ${pod} . > /dev/null
+podman build --file Dockerfile --tag ${pod} . > /dev/null
 
 echo "starting network..."
 podman network create ${pod} > /dev/null 2>&1 || true

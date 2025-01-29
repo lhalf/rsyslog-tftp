@@ -1,0 +1,7 @@
+[rsyslog_daily_v8]
+name=Adiscon RHEL-$releasever - Daily packages for $basearch
+baseurl=https://rpms.adiscon.com/v8-stable-daily/rhel-$releasever/$basearch
+enabled=1
+gpgcheck=0
+gpgkey=https://rpms.adiscon.com/RPM-GPG-KEY-Adiscon
+protect=1
