@@ -4,6 +4,8 @@ pod=rsyslog
 input_pod=input
 output_pod=output
 
+trap 'echo "stopping all pods..."; podman stop --all' EXIT
+
 echo "building pod ${pod}..."
 podman build --file Dockerfile --tag ${pod} . > /dev/null
 
@@ -15,6 +17,7 @@ podman run \
 	--detach \
 	--replace \
 	-v "$(pwd)/input/rsyslog.conf:/etc/rsyslog.conf":Z \
+	-v "$(pwd)/input/stdin-to-tftp.sh:/usr/bin/stdin-to-tftp.sh":Z \
 	-v "$(pwd)/build/tftp-client:/usr/bin/tftp-client":Z \
 	-p "10514:514" \
 	--name ${input_pod} \
@@ -30,3 +33,15 @@ podman run \
 	--name ${output_pod} \
 	--network ${pod} \
 	${pod}
+
+echo "sending messages at ${input_pod}..."
+echo "message 1" | nc -w1 127.0.0.1 10514
+echo "message 2" | nc -w1 127.0.0.1 10514
+echo "message 3" | nc -w1 127.0.0.1 10514
+echo "message 4" | nc -w1 127.0.0.1 10514
+
+echo "${input_pod} logs..."
+podman logs input
+
+echo "${output_pod} logs..."
+podman logs output

@@ -9,7 +9,7 @@ done
 
 mkdir -p build
 
-cp tftp-server.go go-tftp/cmd/tftp-server/main.go
+cp output/tftp-server.go go-tftp/cmd/tftp-server/main.go
 
 pushd go-tftp > /dev/null
     echo building tftp-client...
