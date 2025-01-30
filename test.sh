@@ -35,10 +35,10 @@ podman run \
 	${pod}
 
 echo "sending messages at ${input_pod}..."
-echo "message 1" | nc -w1 127.0.0.1 10514
-echo "message 2" | nc -w1 127.0.0.1 10514
-echo "message 3" | nc -w1 127.0.0.1 10514
-echo "message 4" | nc -w1 127.0.0.1 10514
+echo "<1>Jan 22 12:34:56 myhostname myapp[1234]: First message." | nc -w1 127.0.0.1 10514
+echo "<2>Jan 22 12:34:57 myhostname myapp[1234]: Second message." | nc -w1 127.0.0.1 10514
+echo "<3>Jan 22 12:34:58 myhostname myapp[1234]: Third message." | nc -w1 127.0.0.1 10514
+echo "<4>Jan 22 12:34:59 myhostname myapp[1234]: Fourth message." | nc -w1 127.0.0.1 10514
 
 echo "${input_pod} logs..."
 podman logs input
