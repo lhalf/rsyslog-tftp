@@ -7,13 +7,12 @@ for dep in "${dependencies[@]}"; do
   fi
 done
 
+rm -rf build
 mkdir -p build
-
-cp output/tftp-server.go go-tftp/cmd/tftp-server/main.go
 
 pushd go-tftp > /dev/null
     echo building tftp-client...
     go build -o ../build/tftp-client cmd/tftp-client/main.go
     echo building tftp-server...
-    go build -o ../build/tftp-server cmd/tftp-server/main.go
+    go build -o ../build/tftp-server ../output/tftp-server.go
 popd > /dev/null

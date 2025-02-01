@@ -40,6 +40,8 @@ echo "<2>Jan 22 12:34:57 myhostname myapp[1234]: Second message." | nc -w1 127.0
 echo "<3>Jan 22 12:34:58 myhostname myapp[1234]: Third message." | nc -w1 127.0.0.1 10514
 echo "<4>Jan 22 12:34:59 myhostname myapp[1234]: Fourth message." | nc -w1 127.0.0.1 10514
 
+sleep 1
+
 echo "${input_pod} logs..."
 podman logs input
 
