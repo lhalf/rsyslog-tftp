@@ -1,0 +1,28 @@
+name: build and test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: centos-stream9
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: install dependencies
+        run: |
+          sudo dnf install -y podman
+          sudo dnf install -y golang
+
+      - name: build
+        working-directory: ${{ github.workspace }}
+        run: ./scripts/build.sh
+
+      - name: test
+        working-directory: ${{ github.workspace }}
+        run: ./scripts/test.sh
