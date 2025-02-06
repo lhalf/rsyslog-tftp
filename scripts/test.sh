@@ -17,8 +17,7 @@ podman run \
 	--detach \
 	--replace \
 	-v "$(pwd)/${input}/rsyslog.conf:/etc/rsyslog.conf":Z \
-	-v "$(pwd)/${input}/stdin-to-tftp.sh:/usr/bin/stdin-to-tftp.sh":Z \
-	-v "$(pwd)/build/tftp-client:/usr/bin/tftp-client":Z \
+	-v "$(pwd)/build/omtftp:/usr/bin/omtftp":Z \
 	-p "10514:514" \
 	--name ${input} \
 	--network ${pod} \

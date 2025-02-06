@@ -11,8 +11,8 @@ rm -rf build
 mkdir -p build
 
 pushd go-tftp > /dev/null
-    echo building tftp-client...
-    go build -o ../build/tftp-client cmd/tftp-client/main.go
+    echo building omtftp...
+    go build -o ../build/omtftp ../omtftp/omtftp.go
     echo building tftp-server...
     go build -o ../build/tftp-server ../imtftp/tftp-server.go
 popd > /dev/null
