@@ -28,43 +28,36 @@ func main() {
 func processTransactions(reader *bufio.Reader, client *tftp.Client, address string) {
 	for {
 		line, err := reader.ReadString('\n')
-
 		if err != nil {
 			if err == io.EOF {
 				log.Println("EOF received, exiting.")
 				return
 			}
-			log.Fatalf("Error reading from stdin: %v", err)
+			log.Printf("Error reading from stdin: %v", err)
+			continue
 		}
 
-		line = strings.TrimSpace(line)
+		if line != "BEGIN TRANSACTION" {
+			continue
+		}
 
-		if line == "BEGIN TRANSACTION" {
+		var messageBatch strings.Builder
 
-			messageBatch := ""
-
-			for {
-				message, err := reader.ReadString('\n')
-
-				if err != nil {
-					log.Fatalf("Error reading message line: %v", err)
-				}
-
-				message = strings.TrimSpace(message)
-
-				if message == "COMMIT TRANSACTION" {
-
-					err := client.Put(address, strings.NewReader(messageBatch), 0)
-
-					if err != nil {
-						log.Printf("Error sending batch: %v", err)
-					}
-
-					break
-				}
-
-				messageBatch += message + "\n"
+		for {
+			message, err := reader.ReadString('\n')
+			if err != nil {
+				log.Printf("Error reading message line: %v", err)
+				break
 			}
+
+			if message == "COMMIT TRANSACTION" {
+				if err := client.Put(address, strings.NewReader(messageBatch.String()), 0); err != nil {
+					log.Printf("Error sending messages: %v", err)
+				}
+				break
+			}
+
+			messageBatch.WriteString(message + "\n")
 		}
 	}
 }
