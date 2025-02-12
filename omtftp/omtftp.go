@@ -28,6 +28,7 @@ func main() {
 func processTransactions(reader *bufio.Reader, client *tftp.Client, address string) {
 	for {
 		line, err := reader.ReadString('\n')
+
 		if err != nil {
 			if err == io.EOF {
 				log.Println("EOF received, exiting.")
@@ -37,7 +38,7 @@ func processTransactions(reader *bufio.Reader, client *tftp.Client, address stri
 			continue
 		}
 
-		if line != "BEGIN TRANSACTION" {
+		if line == "BEGIN TRANSACTION" {
 			continue
 		}
 
@@ -45,10 +46,13 @@ func processTransactions(reader *bufio.Reader, client *tftp.Client, address stri
 
 		for {
 			message, err := reader.ReadString('\n')
+
 			if err != nil {
 				log.Printf("Error reading message line: %v", err)
 				break
 			}
+
+			message = strings.TrimSpace(message)
 
 			if message == "COMMIT TRANSACTION" {
 				if err := client.Put(address, strings.NewReader(messageBatch.String()), 0); err != nil {
