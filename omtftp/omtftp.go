@@ -45,6 +45,8 @@ func processTransactions(reader *bufio.Scanner, client TFTPClient, address strin
 				if err := client.Put(address, strings.NewReader(messageBatch.String()), 0); err != nil {
 					log.Printf("Error sending messages: %v", err)
 				}
+
+				messageBatch.Reset()
 			}
 		default:
 			if inTransaction {
