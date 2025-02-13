@@ -11,6 +11,10 @@ import (
 	"github.com/oakdoor/go-tftp/tftp"
 )
 
+type TFTPClient interface {
+	Put(url string, r io.Reader, size int64) (err error)
+}
+
 func main() {
 	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds)
 	address, options := parseCmdLine()
@@ -25,7 +29,7 @@ func main() {
 	processTransactions(reader, client, address)
 }
 
-func processTransactions(reader *bufio.Reader, client *tftp.Client, address string) {
+func processTransactions(reader *bufio.Reader, client TFTPClient, address string) {
 	for {
 		line, err := reader.ReadString('\n')
 
