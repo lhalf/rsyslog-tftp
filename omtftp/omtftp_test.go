@@ -34,7 +34,7 @@ func (m *MockTFTPClient) Put(url string, reader io.Reader, size int64) (err erro
 	return m.PutError
 }
 
-func TestProcessTransactions_InvalidBegin(t *testing.T) {
+func TestProcessTransactions_InvalidBeginIsIgnored(t *testing.T) {
 	input := `WRONG TRANSACTION
 Message 1
 COMMIT TRANSACTION
@@ -47,6 +47,37 @@ COMMIT TRANSACTION
 
 	if mockClient.PutCalled {
 		t.Errorf("Expected Put to not be called")
+	}
+}
+
+func TestProcessTransactions_MultipleBeginsIgnored(t *testing.T) {
+	input := `BEGIN TRANSACTION
+BEGIN TRANSACTION
+Message 1
+COMMIT TRANSACTION
+`
+	reader := bufio.NewScanner(strings.NewReader(input))
+	mockClient := &MockTFTPClient{}
+	address := "test_address"
+
+	processTransactions(reader, mockClient, address)
+
+	if !mockClient.PutCalled {
+		t.Errorf("Expected Put to be called")
+	}
+
+	if mockClient.PutURL != address {
+		t.Errorf("Expected PutURL to be '%s', got '%s'", address, mockClient.PutURL)
+	}
+
+	expectedData := "Message 1\n"
+
+	if mockClient.ReceivedData != expectedData {
+		t.Errorf("Expected PutReader data to be '%s', but got '%s'", expectedData, mockClient.ReceivedData)
+	}
+
+	if mockClient.PutSize != 0 {
+		t.Errorf("Expected PutSize to be 0, but got %d", mockClient.PutSize)
 	}
 }
 
