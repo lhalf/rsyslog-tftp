@@ -24,48 +24,32 @@ func main() {
 		log.Fatalf("Failed to create TFTP client: %v", err)
 	}
 
-	reader := bufio.NewReader(os.Stdin)
+	reader := bufio.NewScanner(os.Stdin)
 
 	processTransactions(reader, client, address)
 }
 
-func processTransactions(reader *bufio.Reader, client TFTPClient, address string) {
-	for {
-		line, err := reader.ReadString('\n')
+func processTransactions(reader *bufio.Scanner, client TFTPClient, address string) {
+	var inTransaction = false
+	var messageBatch strings.Builder
 
-		if err != nil {
-			if err == io.EOF {
-				log.Println("EOF received, exiting.")
-				return
-			}
-			log.Printf("Error reading from stdin: %v", err)
-			continue
-		}
+	for reader.Scan() {
 
-		if line == "BEGIN TRANSACTION" {
-			continue
-		}
+		switch reader.Text() {
+		case "BEGIN TRANSACTION":
+			inTransaction = true
+		case "COMMIT TRANSACTION":
+			if inTransaction {
+				inTransaction = false
 
-		var messageBatch strings.Builder
-
-		for {
-			message, err := reader.ReadString('\n')
-
-			if err != nil {
-				log.Printf("Error reading message line: %v", err)
-				break
-			}
-
-			message = strings.TrimSpace(message)
-
-			if message == "COMMIT TRANSACTION" {
 				if err := client.Put(address, strings.NewReader(messageBatch.String()), 0); err != nil {
 					log.Printf("Error sending messages: %v", err)
 				}
-				break
 			}
-
-			messageBatch.WriteString(message + "\n")
+		default:
+			if inTransaction {
+				messageBatch.WriteString(reader.Text() + "\n")
+			}
 		}
 	}
 }
