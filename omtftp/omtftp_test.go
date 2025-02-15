@@ -50,7 +50,7 @@ COMMIT TRANSACTION
 	}
 }
 
-func TestProcessTransactions_MultipleBeginsIgnored(t *testing.T) {
+func TestProcessTransactions_BeginInsideTransactionIgnored(t *testing.T) {
 	input := `BEGIN TRANSACTION
 BEGIN TRANSACTION
 Message 1
