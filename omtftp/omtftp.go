@@ -34,18 +34,15 @@ func processTransactions(reader *bufio.Scanner, client TFTPClient, address strin
 	var messageBatch strings.Builder
 
 	for reader.Scan() {
-
 		switch reader.Text() {
 		case "BEGIN TRANSACTION":
 			inTransaction = true
 		case "COMMIT TRANSACTION":
 			if inTransaction {
 				inTransaction = false
-
 				if err := client.Put(address, strings.NewReader(messageBatch.String()), 0); err != nil {
 					log.Printf("Error sending messages: %v", err)
 				}
-
 				messageBatch.Reset()
 			}
 		default:
