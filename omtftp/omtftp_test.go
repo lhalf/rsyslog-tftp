@@ -81,6 +81,37 @@ COMMIT TRANSACTION
 	}
 }
 
+func TestProcessTransactions_CommitOutsideTransactionIgnored(t *testing.T) {
+	input := `COMMIT TRANSACTION
+BEGIN TRANSACTION
+Message 1
+COMMIT TRANSACTION
+`
+	reader := bufio.NewScanner(strings.NewReader(input))
+	mockClient := &MockTFTPClient{}
+	address := "test_address"
+
+	processTransactions(reader, mockClient, address)
+
+	if !mockClient.PutCalled {
+		t.Errorf("Expected Put to be called")
+	}
+
+	if mockClient.PutURL != address {
+		t.Errorf("Expected PutURL to be '%s', got '%s'", address, mockClient.PutURL)
+	}
+
+	expectedData := "Message 1\n"
+
+	if mockClient.ReceivedData != expectedData {
+		t.Errorf("Expected PutReader data to be '%s', but got '%s'", expectedData, mockClient.ReceivedData)
+	}
+
+	if mockClient.PutSize != 0 {
+		t.Errorf("Expected PutSize to be 0, but got %d", mockClient.PutSize)
+	}
+}
+
 func TestProcessTransactions_SingleMessage(t *testing.T) {
 	input := `BEGIN TRANSACTION
 Message 1
