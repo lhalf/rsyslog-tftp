@@ -42,6 +42,10 @@ COMMIT TRANSACTION
 	if mockClient.PutCallCount != 0 {
 		t.Errorf("Expected Put to not be called")
 	}
+
+	if len(mockClient.SentBatches) != 0 {
+		t.Errorf("Expected no batches to be sent")
+	}
 }
 
 func TestProcessTransactions_BeginInsideTransactionIgnored(t *testing.T) {
