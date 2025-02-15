@@ -10,7 +10,6 @@ import (
 type MockTFTPClient struct {
 	PutCallCount int
 	PutURL       string
-	PutError     error
 	SentBatches  []string
 }
 
@@ -25,7 +24,7 @@ func (m *MockTFTPClient) Put(url string, reader io.Reader, size int64) (err erro
 		}
 		m.SentBatches = append(m.SentBatches, string(data))
 	}
-	return m.PutError
+	return nil
 }
 
 func TestProcessTransactions_InvalidBeginIsIgnored(t *testing.T) {
