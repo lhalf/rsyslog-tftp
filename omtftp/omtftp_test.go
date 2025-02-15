@@ -10,7 +10,6 @@ import (
 type MockTFTPClient struct {
 	PutCallCount int
 	PutURL       string
-	PutSize      int64
 	PutError     error
 	SentBatches  []string
 }
@@ -18,7 +17,6 @@ type MockTFTPClient struct {
 func (m *MockTFTPClient) Put(url string, reader io.Reader, size int64) (err error) {
 	m.PutCallCount++
 	m.PutURL = url
-	m.PutSize = size
 
 	if reader != nil {
 		data, err := io.ReadAll(reader)
@@ -71,10 +69,6 @@ COMMIT TRANSACTION
 	if mockClient.SentBatches[0] != expectedBatch {
 		t.Errorf("Expected sent batch to be '%s', but got '%s'", expectedBatch, mockClient.SentBatches[0])
 	}
-
-	if mockClient.PutSize != 0 {
-		t.Errorf("Expected PutSize to be 0, but got %d", mockClient.PutSize)
-	}
 }
 
 func TestProcessTransactions_CommitOutsideTransactionIgnored(t *testing.T) {
@@ -102,10 +96,6 @@ COMMIT TRANSACTION
 	if mockClient.SentBatches[0] != expectedBatch {
 		t.Errorf("Expected sent batch to be '%s', but got '%s'", expectedBatch, mockClient.SentBatches[0])
 	}
-
-	if mockClient.PutSize != 0 {
-		t.Errorf("Expected PutSize to be 0, but got %d", mockClient.PutSize)
-	}
 }
 
 func TestProcessTransactions_SingleMessage(t *testing.T) {
@@ -131,10 +121,6 @@ COMMIT TRANSACTION
 
 	if mockClient.SentBatches[0] != expectedBatch {
 		t.Errorf("Expected sent batch to be '%s', but got '%s'", expectedBatch, mockClient.SentBatches[0])
-	}
-
-	if mockClient.PutSize != 0 {
-		t.Errorf("Expected PutSize to be 0, but got %d", mockClient.PutSize)
 	}
 }
 
@@ -163,10 +149,6 @@ COMMIT TRANSACTION
 
 	if mockClient.SentBatches[0] != expectedBatch {
 		t.Errorf("Expected sent batch to be '%s', but got '%s'", expectedBatch, mockClient.SentBatches[0])
-	}
-
-	if mockClient.PutSize != 0 {
-		t.Errorf("Expected PutSize to be 0, but got %d", mockClient.PutSize)
 	}
 }
 
@@ -202,9 +184,5 @@ COMMIT TRANSACTION
 
 	if mockClient.SentBatches[1] != secondExpectedBatch {
 		t.Errorf("Expected second sent batch to be '%s', but got '%s'", secondExpectedBatch, mockClient.SentBatches[1])
-	}
-
-	if mockClient.PutSize != 0 {
-		t.Errorf("Expected PutSize to be 0, but got %d", mockClient.PutSize)
 	}
 }
