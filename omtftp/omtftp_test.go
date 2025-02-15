@@ -8,28 +8,24 @@ import (
 )
 
 type MockTFTPClient struct {
-	PutCalled    bool
+	PutCallCount int
 	PutURL       string
-	PutReader    io.Reader
 	PutSize      int64
 	PutError     error
-	ReceivedData []string
-	CallCount    int
+	SentBatches  []string
 }
 
 func (m *MockTFTPClient) Put(url string, reader io.Reader, size int64) (err error) {
-	m.PutCalled = true
+	m.PutCallCount++
 	m.PutURL = url
-	m.PutReader = reader
 	m.PutSize = size
-	m.CallCount++
 
 	if reader != nil {
 		data, err := io.ReadAll(reader)
 		if err != nil {
 			return err
 		}
-		m.ReceivedData = append(m.ReceivedData, string(data))
+		m.SentBatches = append(m.SentBatches, string(data))
 	}
 	return m.PutError
 }
@@ -45,7 +41,7 @@ COMMIT TRANSACTION
 
 	processTransactions(reader, mockClient, address)
 
-	if mockClient.PutCalled {
+	if mockClient.PutCallCount != 0 {
 		t.Errorf("Expected Put to not be called")
 	}
 }
@@ -62,18 +58,18 @@ COMMIT TRANSACTION
 
 	processTransactions(reader, mockClient, address)
 
-	if !mockClient.PutCalled {
-		t.Errorf("Expected Put to be called")
+	if mockClient.PutCallCount != 1 {
+		t.Errorf("Expected Put to be called once")
 	}
 
 	if mockClient.PutURL != address {
 		t.Errorf("Expected PutURL to be '%s', got '%s'", address, mockClient.PutURL)
 	}
 
-	expectedData := "Message 1\n"
+	expectedBatch := "Message 1\n"
 
-	if mockClient.ReceivedData[0] != expectedData {
-		t.Errorf("Expected PutReader data to be '%s', but got '%s'", expectedData, mockClient.ReceivedData)
+	if mockClient.SentBatches[0] != expectedBatch {
+		t.Errorf("Expected sent batch to be '%s', but got '%s'", expectedBatch, mockClient.SentBatches[0])
 	}
 
 	if mockClient.PutSize != 0 {
@@ -93,18 +89,18 @@ COMMIT TRANSACTION
 
 	processTransactions(reader, mockClient, address)
 
-	if !mockClient.PutCalled {
-		t.Errorf("Expected Put to be called")
+	if mockClient.PutCallCount != 1 {
+		t.Errorf("Expected Put to be called once")
 	}
 
 	if mockClient.PutURL != address {
 		t.Errorf("Expected PutURL to be '%s', got '%s'", address, mockClient.PutURL)
 	}
 
-	expectedData := "Message 1\n"
+	expectedBatch := "Message 1\n"
 
-	if mockClient.ReceivedData[0] != expectedData {
-		t.Errorf("Expected PutReader data to be '%s', but got '%s'", expectedData, mockClient.ReceivedData)
+	if mockClient.SentBatches[0] != expectedBatch {
+		t.Errorf("Expected sent batch to be '%s', but got '%s'", expectedBatch, mockClient.SentBatches[0])
 	}
 
 	if mockClient.PutSize != 0 {
@@ -123,18 +119,18 @@ COMMIT TRANSACTION
 
 	processTransactions(reader, mockClient, address)
 
-	if !mockClient.PutCalled {
-		t.Errorf("Expected Put to be called")
+	if mockClient.PutCallCount != 1 {
+		t.Errorf("Expected Put to be called once")
 	}
 
 	if mockClient.PutURL != address {
 		t.Errorf("Expected PutURL to be '%s', got '%s'", address, mockClient.PutURL)
 	}
 
-	expectedData := "Message 1\n"
+	expectedBatch := "Message 1\n"
 
-	if mockClient.ReceivedData[0] != expectedData {
-		t.Errorf("Expected PutReader data to be '%s', but got '%s'", expectedData, mockClient.ReceivedData)
+	if mockClient.SentBatches[0] != expectedBatch {
+		t.Errorf("Expected sent batch to be '%s', but got '%s'", expectedBatch, mockClient.SentBatches[0])
 	}
 
 	if mockClient.PutSize != 0 {
@@ -155,18 +151,18 @@ COMMIT TRANSACTION
 
 	processTransactions(reader, mockClient, address)
 
-	if !mockClient.PutCalled {
-		t.Errorf("Expected Put to be called")
+	if mockClient.PutCallCount != 1 {
+		t.Errorf("Expected Put to be called once")
 	}
 
 	if mockClient.PutURL != address {
 		t.Errorf("Expected PutURL to be '%s', got '%s'", address, mockClient.PutURL)
 	}
 
-	expectedData := "Message 1\nMessage 2\nMessage 3\n"
+	expectedBatch := "Message 1\nMessage 2\nMessage 3\n"
 
-	if mockClient.ReceivedData[0] != expectedData {
-		t.Errorf("Expected PutReader data to be '%s', but got '%s'", expectedData, mockClient.ReceivedData)
+	if mockClient.SentBatches[0] != expectedBatch {
+		t.Errorf("Expected sent batch to be '%s', but got '%s'", expectedBatch, mockClient.SentBatches[0])
 	}
 
 	if mockClient.PutSize != 0 {
@@ -189,11 +185,7 @@ COMMIT TRANSACTION
 
 	processTransactions(reader, mockClient, address)
 
-	if !mockClient.PutCalled {
-		t.Errorf("Expected Put to be called")
-	}
-
-	if mockClient.CallCount != 2 {
+	if mockClient.PutCallCount != 2 {
 		t.Errorf("Expected Put to be called twice")
 	}
 
@@ -204,12 +196,12 @@ COMMIT TRANSACTION
 	firstExpectedBatch := "Message 1\n"
 	secondExpectedBatch := "Message 2\nMessage 3\n"
 
-	if mockClient.ReceivedData[0] != firstExpectedBatch {
-		t.Errorf("Expected PutReader data to be '%s', but got '%s'", firstExpectedBatch, mockClient.ReceivedData)
+	if mockClient.SentBatches[0] != firstExpectedBatch {
+		t.Errorf("Expected first sent batch to be '%s', but got '%s'", firstExpectedBatch, mockClient.SentBatches[0])
 	}
 
-	if mockClient.ReceivedData[1] != secondExpectedBatch {
-		t.Errorf("Expected PutReader data to be '%s', but got '%s'", secondExpectedBatch, mockClient.ReceivedData)
+	if mockClient.SentBatches[1] != secondExpectedBatch {
+		t.Errorf("Expected second sent batch to be '%s', but got '%s'", secondExpectedBatch, mockClient.SentBatches[1])
 	}
 
 	if mockClient.PutSize != 0 {
