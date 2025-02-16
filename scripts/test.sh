@@ -28,7 +28,7 @@ podman run \
 	--detach \
 	--replace \
 	-v "$(pwd)/${output}/rsyslog.conf:/etc/rsyslog.conf":Z \
-	-v "$(pwd)/build/tftp-server:/usr/bin/tftp-server":Z \
+	-v "$(pwd)/build/imtftp:/usr/bin/imtftp":Z \
 	--name ${output} \
 	--network ${pod} \
 	${pod}
