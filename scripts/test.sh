@@ -29,15 +29,16 @@ podman run \
 	--replace \
 	-v "$(pwd)/${output}/rsyslog.conf:/etc/rsyslog.conf":Z \
 	-v "$(pwd)/build/imtftp:/usr/bin/imtftp":Z \
+	-v "$(pwd)/sisl.py:/usr/bin/sisl.py":Z \
 	--name ${output} \
 	--network ${pod} \
 	${pod}
 
 echo "sending messages at ${input}..."
 echo "<1>Jan 22 12:34:56 myhostname myapp[1234]: First message." | nc -w1 127.0.0.1 10514
-echo "<2>Jan 22 12:34:57 myhostname myapp[1234]: Second message." | nc -w1 127.0.0.1 10514
-echo "<3>Jan 22 12:34:58 myhostname myapp[1234]: Third message." | nc -w1 127.0.0.1 10514
-echo "<4>Jan 22 12:34:59 myhostname myapp[1234]: Fourth message." | nc -w1 127.0.0.1 10514
+echo "<2>Jan 22 12:34:57 myhostname myapp[2345]: Second message." | nc -w1 127.0.0.1 10514
+echo "<3>Jan 22 12:34:58 myhostname myapp[3456]: Third message." | nc -w1 127.0.0.1 10514
+echo "<4>Jan 22 12:34:59 myhostname myapp[4567]: Fourth message." | nc -w1 127.0.0.1 10514
 
 sleep 1
 
