@@ -13,8 +13,5 @@ jobs:
       - uses: extractions/setup-just@v3
       - uses: redhat-actions/podman-install@main
 
-      - name: update submodules
-        run: git submodule update --recursive
-
       - name: test
         run: just test
