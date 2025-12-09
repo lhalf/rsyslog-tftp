@@ -16,8 +16,8 @@ echo "starting ${input}..."
 podman run \
 	--detach \
 	--replace \
-	-v "$(pwd)/${input}/rsyslog.conf:/etc/rsyslog.conf":Z \
-	-v "$(pwd)/build/omtftp:/usr/bin/omtftp":Z \
+	-v "$(pwd)/${input}.conf:/etc/rsyslog.conf":Z \
+	-v "$(pwd)/../build/omtftp:/usr/bin/omtftp":Z \
 	-p "10514:514" \
 	--name ${input} \
 	--network ${pod} \
@@ -27,9 +27,9 @@ echo "starting ${output}..."
 podman run \
 	--detach \
 	--replace \
-	-v "$(pwd)/${output}/rsyslog.conf:/etc/rsyslog.conf":Z \
-	-v "$(pwd)/build/imtftp:/usr/bin/imtftp":Z \
-	-v "$(pwd)/sisl.py:/usr/bin/sisl.py":Z \
+	-v "$(pwd)/${output}.conf:/etc/rsyslog.conf":Z \
+	-v "$(pwd)/../build/imtftp:/usr/bin/imtftp":Z \
+	-p "8069:69" \
 	--name ${output} \
 	--network ${pod} \
 	${pod}

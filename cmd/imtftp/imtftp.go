@@ -6,7 +6,6 @@ import (
 	"io"
 	"log"
 	"os"
-
 	"github.com/oakdoor/go-tftp/tftp"
 )
 

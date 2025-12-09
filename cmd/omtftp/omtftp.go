@@ -7,7 +7,6 @@ import (
 	"log"
 	"os"
 	"strings"
-
 	"github.com/oakdoor/go-tftp/tftp"
 )
 

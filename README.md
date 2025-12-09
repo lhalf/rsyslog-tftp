@@ -12,4 +12,4 @@ You will need [Go](https://go.dev/doc/install).
 
 ## Usage
 
-See usage examples in [omtftp/rsyslog.conf](omtftp/rsyslog.conf) and [imtftp/rsyslog.conf](imtftp/rsyslog.conf).
+See usage examples in [omtftp/rsyslog.conf](tests/omtftp.conf) and [imtftp/rsyslog.conf](tests/imtftp.conf).
