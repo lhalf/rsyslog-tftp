@@ -4,7 +4,19 @@ pod=rsyslog
 input=omtftp
 output=imtftp
 
-trap 'echo "stopping all pods..."; podman stop --all' EXIT
+function on_exit()
+{
+  echo "${input} logs..."
+  podman logs ${input}
+
+  echo "${output} logs..."
+  podman logs ${output}
+
+  echo "stopping all pods..."
+  podman stop --all
+}
+
+trap on_exit EXIT
 
 echo "building pod ${pod}..."
 podman build --file Dockerfile --tag ${pod} . > /dev/null
@@ -41,9 +53,3 @@ echo "<3>Jan 22 12:34:58 myhostname myapp[3456]: Third message." | nc -w1 127.0.
 echo "<4>Jan 22 12:34:59 myhostname myapp[4567]: Fourth message." | nc -w1 127.0.0.1 10514
 
 sleep 1
-
-echo "${input} logs..."
-podman logs ${input}
-
-echo "${output} logs..."
-podman logs ${output}
