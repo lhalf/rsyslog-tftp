@@ -1,9 +1,9 @@
 set shell := ["bash", "-euc"]
 
 [working-directory: 'cmd/omtftp']
-build:
-    go build -o ../../build/imtftp ../imtftp/imtftp.go
-    go build -o ../../build/omtftp omtftp.go
+build ARCH="amd64":
+    GOARCH={{ARCH}} go build -o ../../build/{{ARCH}}/imtftp ../imtftp/imtftp.go
+    GOARCH={{ARCH}} go build -o ../../build/{{ARCH}}/omtftp omtftp.go
 
 [working-directory: 'tests']
 test: build
