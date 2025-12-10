@@ -26,24 +26,22 @@ podman network create ${pod} > /dev/null 2>&1 || true
 
 echo "starting ${input}..."
 podman run \
-  --privileged \
 	--detach \
 	--replace \
 	-v "$(pwd)/${input}.conf:/etc/rsyslog.conf":Z \
 	-v "$(pwd)/../build/omtftp:/usr/bin/omtftp":Z \
-	-p "10514:514" \
+	-p "10514:10514" \
 	--name ${input} \
 	--network ${pod} \
 	${pod}
 
 echo "starting ${output}..."
 podman run \
-  --privileged \
 	--detach \
 	--replace \
 	-v "$(pwd)/${output}.conf:/etc/rsyslog.conf":Z \
 	-v "$(pwd)/../build/imtftp:/usr/bin/imtftp":Z \
-	-p "8069:69" \
+	-p "8069:8069" \
 	--name ${output} \
 	--network ${pod} \
 	${pod}
