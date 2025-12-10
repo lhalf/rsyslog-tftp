@@ -26,4 +26,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: github.ref_type == 'tag'
         with:
-          files: build/amd64.tar.gz build/arm64.tar.gz
+          files: |
+            build/amd64.tar.gz
+            build/arm64.tar.gz
