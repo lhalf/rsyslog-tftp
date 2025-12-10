@@ -26,6 +26,7 @@ podman network create ${pod} > /dev/null 2>&1 || true
 
 echo "starting ${input}..."
 podman run \
+  --privileged \
 	--detach \
 	--replace \
 	-v "$(pwd)/${input}.conf:/etc/rsyslog.conf":Z \
@@ -37,6 +38,7 @@ podman run \
 
 echo "starting ${output}..."
 podman run \
+  --privileged \
 	--detach \
 	--replace \
 	-v "$(pwd)/${output}.conf:/etc/rsyslog.conf":Z \
