@@ -8,3 +8,8 @@ build ARCH="amd64":
 [working-directory: 'tests']
 test: build
     ./test.sh
+
+package ARCH="amd64": (build ARCH)
+    tar -czf build/{{ARCH}}.tar.gz --directory build/{{ARCH}} .
+
+package-all: package (package "arm64")

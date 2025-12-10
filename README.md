@@ -1,5 +1,6 @@
 # rsyslog-tftp
 
+[![GitHub Release](https://img.shields.io/github/v/release/lhalf/rsyslog-tftp)](https://github.com/lhalf/rsyslog-tftp/releases)
 [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/lhalf/rsyslog-tftp/on_commit.yml)](https://github.com/lhalf/rsyslog-tftp/actions/workflows/on_commit.yml)
 [![MIT](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
 
