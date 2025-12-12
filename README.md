@@ -14,7 +14,6 @@ The interface follows the standard for external output plugins, including suppor
 ## Usage
 
 ### omtftp
-
 ```
 Usage of omtftp:
   -blocksize int
@@ -37,7 +36,6 @@ action(type="omprog"
 ```
 
 ### imtftp
-
 ```
 Usage of imtftp:
   -port int
