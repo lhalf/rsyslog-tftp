@@ -13,8 +13,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: build
-        run: ./dev/run_in_pod.sh "just build"
+      - name: lint
+        run: ./dev/run_in_pod.sh "just e2e-lint"
+
+      - name: test
+        run: ./dev/run_in_pod.sh "just test"
 
       - name: package
         run: ./dev/run_in_pod.sh "just package-all"
