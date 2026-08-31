@@ -10,22 +10,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-go@v6
-      - uses: extractions/setup-just@v3
+        with:
+          fetch-depth: 0
 
       - name: build
-        run: just build
+        run: ./dev/run_in_pod.sh "just build"
 
       - name: package amd64
-        run: just package
+        run: ./dev/run_in_pod.sh "just package"
 
       - name: package arm64
-        run: just package arm64
+        run: ./dev/run_in_pod.sh "just package arm64"
 
       - name: release
         uses: softprops/action-gh-release@v2
         if: github.ref_type == 'tag'
         with:
-          files: |
-            build/amd64.tar.gz
-            build/arm64.tar.gz
+          files: build/*.deb

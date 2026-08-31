@@ -6,11 +6,20 @@ ENV GOCACHE=/tmp/go-build
 ENV GOMODCACHE=/tmp/go-mod
 ENV GOFLAGS=-buildvcs=false
 
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates
+
+# nfpm
+RUN echo 'deb [trusted=yes] https://repo.goreleaser.com/apt/ /' > /etc/apt/sources.list.d/goreleaser.list
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        ca-certificates \
         git \
         golang-go \
         just \
         netcat-openbsd \
-        tar \
-    && rm -rf /var/lib/apt/lists/*
+        nfpm
+
+# shrink image by dropping the apt package index
+RUN rm -rf /var/lib/apt/lists/*
+
+# the mounted repo is owned by the host user, not root
+RUN git config --system --add safe.directory '*'

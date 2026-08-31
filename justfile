@@ -9,7 +9,9 @@ build ARCH="amd64":
 test: build
     ./test.sh
 
+[working-directory: 'build']
 package ARCH="amd64": (build ARCH)
-    tar -czf build/{{ARCH}}.tar.gz --directory build/{{ARCH}} .
+    cd {{ARCH}} && ARCH={{ARCH}} VERSION="$(git describe --tags --abbrev=0 2>/dev/null || echo v0.0.0)" \
+        nfpm package --config ../../package/nfpm.yaml --packager deb --target ..
 
 package-all: package (package "arm64")

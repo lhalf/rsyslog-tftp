@@ -1,0 +1,18 @@
+name: rsyslog-tftp
+arch: ${ARCH}
+version: ${VERSION}
+section: admin
+priority: optional
+maintainer: lhalf
+description: |
+  TFTP modules for rsyslog.
+  Provides the omtftp output and imtftp input plugins.
+vendor: lhalf
+homepage: https://github.com/lhalf/rsyslog-tftp
+license: MIT
+
+contents:
+  - src: imtftp
+    dst: /usr/bin/imtftp
+  - src: omtftp
+    dst: /usr/bin/omtftp
