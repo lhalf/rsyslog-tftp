@@ -32,7 +32,7 @@ Usage of omtftp:
 module(load="omprog")
 action(type="omprog"
        useTransactions="on"
-       binary="/usr/bin/omtftp tftp://<URL>:69/")
+       binary="/usr/libexec/rsyslog/omtftp tftp://<URL>:69/")
 ```
 
 ### imtftp
@@ -47,5 +47,5 @@ Usage of imtftp:
 ```
 module(load="improg")
 input(type="improg"
-      binary="/usr/bin/imtftp")
+      binary="/usr/libexec/rsyslog/imtftp")
 ```

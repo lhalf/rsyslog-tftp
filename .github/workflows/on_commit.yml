@@ -16,14 +16,13 @@ jobs:
       - name: build
         run: ./dev/run_in_pod.sh "just build"
 
-      - name: package amd64
-        run: ./dev/run_in_pod.sh "just package"
-
-      - name: package arm64
-        run: ./dev/run_in_pod.sh "just package arm64"
+      - name: package
+        run: ./dev/run_in_pod.sh "just package-all"
 
       - name: release
         uses: softprops/action-gh-release@v2
         if: github.ref_type == 'tag'
         with:
-          files: build/*.deb
+          files: |
+            build/*.deb
+            build/*.rpm

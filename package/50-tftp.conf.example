@@ -1,0 +1,10 @@
+# send messages via TFTP
+#module(load="omprog")
+#action(type="omprog"
+#       useTransactions="on"
+#       binary="/usr/libexec/rsyslog/omtftp tftp://<URL>:69/")
+
+# receive messages via TFTP
+#module(load="improg")
+#input(type="improg"
+#      binary="/usr/libexec/rsyslog/imtftp")

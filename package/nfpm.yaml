@@ -4,15 +4,29 @@ version: ${VERSION}
 section: admin
 priority: optional
 maintainer: lhalf
-description: |
-  TFTP modules for rsyslog.
-  Provides the omtftp output and imtftp input plugins.
+description: TFTP modules for rsyslog.
 vendor: lhalf
 homepage: https://github.com/lhalf/rsyslog-tftp
 license: MIT
 
+depends:
+  - rsyslog
+
 contents:
   - src: imtftp
-    dst: /usr/bin/imtftp
+    dst: /usr/libexec/rsyslog/imtftp
+
   - src: omtftp
-    dst: /usr/bin/omtftp
+    dst: /usr/libexec/rsyslog/omtftp
+
+  - src: ../../LICENSE
+    dst: /usr/share/doc/rsyslog-tftp/copyright
+    packager: deb
+
+  - src: ../../LICENSE
+    dst: /usr/share/licenses/rsyslog-tftp/LICENSE
+    packager: rpm
+
+  - src: ../../package/50-tftp.conf.example
+    dst: /etc/rsyslog.d/50-tftp.conf.example
+    type: config
